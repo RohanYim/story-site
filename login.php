@@ -42,11 +42,10 @@
                     $token = isset($_POST['token']) ? $_POST['token'] : null;
                     // test for validity of the CSRF token on the server side
                     if(!hash_equals($_SESSION['token'], $token)) {
-                        $_SESSION['token'] = bin2hex(random_bytes(32));
                         echo "<div style='text-align:center;'>Invalid form submission. Please try again.</div>";
                     }
                     else{
-                        $user = User::authenticate($username, $password);
+                        $user = User::login($username, $password);
                         if($user) {
                             $_SESSION['userid'] = $user->id;
                             $_SESSION['username'] = $user->username;
