@@ -50,7 +50,7 @@
                         if($user) {
                             $_SESSION['userid'] = $user->id;
                             $_SESSION['username'] = $user->username;
-                            header("Location: main.php");
+                            header("Location: mainpage.php");
                         }
                         else{
                             echo "<div style='text-align:center;'>Incorrect username or password. Please try again.</div>";
