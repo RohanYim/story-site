@@ -14,9 +14,10 @@
             <label>Username: </label>
             <input type="text" name="username" id="username" placeholder="Please input your username" required><br><br>
             <label>Password: </label>
-            <input type="password" name="password" id="password" placeholder="Please input your password" required><br><br>
+            <input type="password" name="password" id="password" placeholder="Please input your password" required><br>
             <input type="submit" value="Log In">
         </form>
+        <br><br>
         <form action="register.php" method="POST">
             Not yet register as a user?&nbsp;&nbsp;<input type="submit" value="Register">
         </form>
