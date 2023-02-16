@@ -11,16 +11,55 @@
     <h1>Login System</h1><br><br>
     <div class = "login">
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-            <label>Username: </label>
-            <input type="text" name="username" id="username" placeholder="Please input your username" required><br><br>
-            <label>Password: </label>
-            <input type="password" name="password" id="password" placeholder="Please input your password" required><br>
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" placeholder="Enter your username" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" placeholder="Endter your password" required><br>
+            <input type="hidden" name="token" value="<?php echo $_SESSION['token'];?>">
             <input type="submit" value="Log In">
         </form>
-        <br><br>
+        <br>
         <form action="register.php" method="POST">
-            Not yet register as a user?&nbsp;&nbsp;<input type="submit" value="Register">
+            <p>Not yet registered? <input type="submit" value="Register"></p>
         </form>
+    </div>
+
+    <div class='info'>
+        <?php
+            require 'user.php';
+
+            session_start();
+            
+            $_SESSION['token'] = bin2hex(random_bytes(32));
+
+            if(isset($_POST['login'])){
+                if(isset($_POST['username']) || isset($_POST['password'])){
+                    echo "<div style='text-align:center;'>Please fill in both fields.</div>";
+                }
+                else{
+                    $username = $_POST['username'];
+                    $password = $_POST['password'];
+                    $token = isset($_POST['token']) ? $_POST['token'] : null;
+                    // test for validity of the CSRF token on the server side
+                    if(!hash_equals($_SESSION['token'], $token)) {
+                        $_SESSION['token'] = bin2hex(random_bytes(32));
+                        echo "<div style='text-align:center;'>Invalid form submission. Please try again.</div>";
+                    }
+                    else{
+                        $user = User::authenticate($username, $password);
+                        if($user) {
+                            $_SESSION['userid'] = $user->id;
+                            $_SESSION['username'] = $user->username;
+                            header("Location: main.php");
+                        }
+                        else{
+                            echo "<div style='text-align:center;'>Incorrect username or password. Please try again.</div>";
+                        }
+                    }
+                }
+
+            }
+        ?>
     </div>
 </body>
 </html>
