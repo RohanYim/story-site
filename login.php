@@ -26,8 +26,6 @@
 
     <div class='info'>
         <?php
-            require 'user.php';
-
             session_start();
             
             $_SESSION['token'] = bin2hex(random_bytes(32));
@@ -49,7 +47,7 @@
                         if($user) {
                             $_SESSION['userid'] = $user->id;
                             $_SESSION['username'] = $user->username;
-                            header("Location: mainpage.php");
+                            header("Location: main.php");
                         }
                         else{
                             echo "<div style='text-align:center;'>Incorrect username or password. Please try again.</div>";
