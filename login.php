@@ -10,7 +10,8 @@
 <body>
     <h1>Login System</h1><br><br>
     <div class = "login">
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+        <!-- <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST"> -->
+        <form action="login.php" method="POST">
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" placeholder="Enter your username" required><br><br>
             <label for="password">Password:</label>
@@ -24,39 +25,48 @@
         </form>
     </div>
 
-    <div class='info'>
-        <?php
-            session_start();
-            
-            $_SESSION['token'] = bin2hex(random_bytes(32));
+    <?php
+        session_start();
 
-            if(isset($_POST['login'])){
-                if(isset($_POST['username']) || isset($_POST['password'])){
-                    echo "<div style='text-align:center;'>Please fill in both fields.</div>";
+        require 'database.php';
+        
+        $_SESSION['token'] = bin2hex(random_bytes(32));
+
+        if(!isset($_POST['username']) || !isset($_POST['password'])){
+            echo "<p>Please fill in both fields.</p>";
+        }
+        else{
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            printf("username: %s", $username);
+            printf("password: %s", $password);
+            $token = isset($_POST['token']) ? $_POST['token'] : null;
+            // test for validity of the CSRF token on the server side
+            if(!hash_equals($_SESSION['token'], $token)) {
+                echo "<p>Invalid form submission.</p>";
+            }
+            else{
+                $stmt = $mysqli->prepare("select id, username, password from users where username=?");
+                if(!$stmt){
+                    printf("Query Prep Failed: %s\n", $mysqli->error);
+                    exit;
+                }
+                // $stmt->bind_param('s', $username);
+                $stmt->execute();
+                $stmt->bind_result($id, $username, $password);
+                $stmt->fetch();
+                $stmt->close();
+                if(!password_verify($password, $hash)){
+                    echo "<p>Incorrect username or password.</p>";
+                    exit;
                 }
                 else{
-                    $username = $_POST['username'];
-                    $password = $_POST['password'];
-                    $token = isset($_POST['token']) ? $_POST['token'] : null;
-                    // test for validity of the CSRF token on the server side
-                    if(!hash_equals($_SESSION['token'], $token)) {
-                        echo "<div style='text-align:center;'>Invalid form submission. Please try again.</div>";
-                    }
-                    else{
-                        $user = User::login($username, $password);
-                        if($user) {
-                            $_SESSION['userid'] = $user->id;
-                            $_SESSION['username'] = $user->username;
-                            header("Location: main.php");
-                        }
-                        else{
-                            echo "<div style='text-align:center;'>Incorrect username or password. Please try again.</div>";
-                        }
-                    }
+                    header("Location: main.php");
+                    exit;
                 }
+            // }
+        }
+    ?>
 
-            }
-        ?>
-    </div>
 </body>
 </html>

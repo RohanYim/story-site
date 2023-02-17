@@ -12,13 +12,15 @@
         <tbody>
             <tr>
                 <td>
-                    <a href="http://18.191.24.174/~RohanSong/module3/group/main.php">
+                    <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/main.php"> -->
+                    <a href="http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/main.php">
                         <img src="static/logo.png" alt="" class='logo'>
                     </a> 
                 </td>
                 <td>
                     <span>
-                        <a href="http://18.191.24.174/~RohanSong/module3/group/main.php">Main Page</a>
+                        <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/main.php">Main Page</a> -->
+                        <a href="http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/main.php">Main Page</a>
                         |
                         <!-- <?php
                             session_start();
@@ -26,9 +28,11 @@
                                 echo $_SESSION['token'];
                             }
                         ?> -->
-                        <a href="http://18.191.24.174/~RohanSong/module3/group/login.php">Login</a>
+                        <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/login.php">Login</a> -->
+                        <a href="http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/login.php">Login</a>
                         |
-                        <a href="http://18.191.24.174/~RohanSong/module3/group/register.php">Register</a> 
+                        <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/register.php">Register</a>  -->
+                        <a href="http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/register.php">Register</a> 
                     </span>
                 </td>
             </tr>

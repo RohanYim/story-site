@@ -10,7 +10,8 @@
 <body>
     <h1>Register System</h1><br><br>
     <div class = "login">
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+        <!-- <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST"> -->
+        <form action="register.php" method="POST">
             <input type="hidden" name="register" value="1">
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" placeholder="Enter your username" required><br><br>
@@ -24,20 +25,50 @@
         <input type="submit" value="Back to Log In Page!">
     </form>
     <?php
-        require 'user.php';
+        // Include database connection
+        session_start();
 
-        if(isset($_POST['register']) && $_POST['register'] == 1){
-            $res = user::register($_POST['username'], $_POST['password']);
-            if ($res == 1) {
-                echo "<p>Username has already taken, please choose a new one!</p>";
+        require 'database.php';
+
+        // Check if the form has been submitted and the redirect has not already happened
+        if (isset($_POST['register'])) {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            // printf("username: %s", $username);
+            // printf("password: %s", $password);
+
+            // Check if the username is already taken
+            $stmt = $mysqli->prepare('SELECT * FROM users WHERE username = ?');
+            $stmt->bind_param('s', $username);
+            $stmt->execute();
+            $row = $stmt->fetch();
+            if ($row) {
+                echo "<p>This username is already taken. Please choose a different one.</p>";
+                header('Location: register.php');
+                exit;
             }
-            else if($res == 2){
-                echo "<p>Invalid username!</p>";
+            $stmt->close();
+
+            // Check if the username is valid
+            if (!preg_match('/^[a-zA-Z0-9]+$/', $username)) {
+                echo "<p>Username can only contain letters and numbers.</p>";
+                header('Location: register.php');
+                exit;
             }
-            else{
-                echo "<p>You have successfully registered! Redirect to login page in 3 seconds.</p>";
-                header("refresh:3; url=login.php");
-            }
+
+            // Hash the password
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+            // Insert the new user into the database
+            $stmt = $mysqli->prepare('insert into users (username, password) VALUES (?, ?)');
+            $stmt->bind_param('ss', $username, $passwordHash);
+            $stmt->execute();
+            $stmt->close();
+
+            // Redirect the user to the login page
+            echo "<p>You have successfully registered. Please log in.</p>";
+            header('Location: login.php');
+            exit;
         }
     ?>
 </body>
