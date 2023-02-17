@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if(!isset($_SESSION['token'])) {
+        $_SESSION['token'] = bin2hex(random_bytes(32));
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +18,8 @@
 <body>
     <h1>Login System</h1><br><br>
     <div class = "login">
-        <!-- <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST"> -->
-        <form action="login.php" method="POST">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+        <!-- <form action="login.php" method="POST"> -->
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" placeholder="Enter your username" required><br><br>
             <label for="password">Password:</label>
@@ -26,23 +34,22 @@
     </div>
 
     <?php
-        session_start();
-
-        require 'database.php';
-        
-        $_SESSION['token'] = bin2hex(random_bytes(32));
-
+    
         if(!isset($_POST['username']) || !isset($_POST['password'])){
             echo "<p>Please fill in both fields.</p>";
         }
         else{
+            require 'database.php';
+
             $username = $_POST['username'];
             $password = $_POST['password'];
-            printf("username: %s", $username);
-            printf("password: %s", $password);
+            // printf("username: %s", $username);
+            // printf("password: %s", $password);
             $token = isset($_POST['token']) ? $_POST['token'] : null;
             // test for validity of the CSRF token on the server side
             if(!hash_equals($_SESSION['token'], $token)) {
+                echo 1 . $token . '<br>';
+                echo 2 . $_SESSION['token'] . '<br>';
                 echo "<p>Invalid form submission.</p>";
             }
             else{
@@ -51,12 +58,13 @@
                     printf("Query Prep Failed: %s\n", $mysqli->error);
                     exit;
                 }
-                // $stmt->bind_param('s', $username);
+                $stmt->bind_param('s', $username);
                 $stmt->execute();
-                $stmt->bind_result($id, $username, $password);
+                $stmt->bind_result($db_id, $db_user, $db_pw);
                 $stmt->fetch();
                 $stmt->close();
-                if(!password_verify($password, $hash)){
+                if(!password_verify($password, $db_pw)){
+                    echo "1. username=" . $db_id . " pw=" . $password . " hashed=" . $db_pw;
                     echo "<p>Incorrect username or password.</p>";
                     exit;
                 }
@@ -64,7 +72,7 @@
                     header("Location: main.php");
                     exit;
                 }
-            // }
+            }
         }
     ?>
 

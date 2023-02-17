@@ -10,8 +10,8 @@
 <body>
     <h1>Register System</h1><br><br>
     <div class = "login">
-        <!-- <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST"> -->
-        <form action="register.php" method="POST">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+        <!-- <form action="register.php" method="POST"> -->
             <input type="hidden" name="register" value="1">
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" placeholder="Enter your username" required><br><br>
