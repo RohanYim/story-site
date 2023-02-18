@@ -38,7 +38,7 @@
             // printf("password: %s", $password);
 
             // Check if the username is already taken
-            $stmt = $mysqli->prepare('SELECT * FROM users WHERE username = ?');
+            $stmt = $mysqli->prepare('select * from users where username = ?');
             $stmt->bind_param('s', $username);
             $stmt->execute();
             $row = $stmt->fetch();
@@ -60,7 +60,7 @@
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
             // Insert the new user into the database
-            $stmt = $mysqli->prepare('insert into users (username, password) VALUES (?, ?)');
+            $stmt = $mysqli->prepare('insert into users (username, password) values (?, ?)');
             $stmt->bind_param('ss', $username, $passwordHash);
             $stmt->execute();
             $stmt->close();

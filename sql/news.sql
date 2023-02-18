@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 16, 2023 at 02:31 AM
+-- Generation Time: Feb 18, 2023 at 07:22 PM
 -- Server version: 10.2.38-MariaDB
 -- PHP Version: 7.2.34
 
@@ -51,6 +51,13 @@ CREATE TABLE `stories` (
   `time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `stories`
+--
+
+INSERT INTO `stories` (`id`, `user_ID`, `title`, `content`, `link`, `time`) VALUES
+(3, 4, 'Washington Post', 'None', 'https://www.washingtonpost.com/', '2023-02-18 19:13:37');
+
 -- --------------------------------------------------------
 
 --
@@ -60,8 +67,20 @@ CREATE TABLE `stories` (
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `username` varchar(100) NOT NULL,
-  `password` varchar(200) NOT NULL
+  `password` varchar(300) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`) VALUES
+(4, 'Fiona', '$2y$10$6d3bmyFyacsghHypCLxfEOiO0qeGEpmkCsCjRXqWmNn7.Q.POhY6G'),
+(5, 'Test', '$2y$10$LB.u9aOiNd9dyu2qVMOkXetOVZx3OCaSCEL/RgRUe/tGDMvVwgDPW'),
+(6, 'AAA', '$2y$10$5CyorYoqugsX9FEKwoDxguQoYQYX.T/B7q5iDR/VcOi78VH1EpzLi'),
+(7, 'abc', '$2y$10$klxSEQ60k9c7amlQEJwOluT7YdjiRVHZYm8HkzWOBPUktavQWVsKy'),
+(8, 'module3', '$2y$10$ER0tQeTao5buENbjkNrgte4bB4RUciuc9Y7Po036iNT8exZCVR0Cm'),
+(9, 'Zining', '$2y$10$3SSRWSxVHGJhmMEmCoTaAeYLpjM.BnO7aDCx3QsJ0mwYknYd46d9G');
 
 --
 -- Indexes for dumped tables
@@ -102,13 +121,13 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `stories`
 --
 ALTER TABLE `stories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
