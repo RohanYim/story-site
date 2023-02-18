@@ -12,27 +12,28 @@
         <tbody>
             <tr>
                 <td>
-                    <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/main.php"> -->
                     <a href="main.php">
                         <img src="static/logo.png" alt="" class='logo'>
                     </a> 
                 </td>
                 <td>
                     <span>
-                        <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/post.php">Post</a> -->
                         <a href="post.php">Post</a>
                         |
-                        <!-- <?php
+                        <?php
                             session_start();
-                            if($_SESSION['token']){
-                                echo $_SESSION['token'];
-                            }
-                        ?> -->
-                        <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/login.php">Login</a> -->
-                        <a href="login.php">Login</a>
-                        |
-                        <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/register.php">Register</a>  -->
-                        <a href="register.php">Register</a> 
+                            if(isset($_SESSION['username'])) {
+                                // User is logged in
+                                echo '<a href="">'.$_SESSION['username'].'</a>
+                                |
+                                <a href="logout.php">Logout</a>';
+                            } else {
+                                // User is not logged in
+                                echo '<a href="login.php">Login</a>
+                                |
+                                <a href="register.php">Register</a>';
+                            }                            
+                        ?>
                     </span>
                 </td>
             </tr>
@@ -64,14 +65,13 @@
                         $seconds = $diff % 60;
                         $output = $days . " days " . $hours . " hours " . $minutes . " minutes " . $seconds . " seconds ago";
 
-                        echo "<tr><td>" . $count . "</td><th>" . $title . "</th></tr>";
+                        echo "<tr><td>" . $count . "</td><th><a href='detailedPage?id=".$id."'>".$title."</a></th></tr>";
                         echo "<tr><th></th><td>by " . $username . "</td><td>" . $output . "</td><td><a href=''>".$counts." comments</a></td></tr>";
                     }
                     $stmt->close();
                 } else {
                     echo "Error: " . $mysqli->error;
                 }
-
             ?>
         </tbody>
     </table>

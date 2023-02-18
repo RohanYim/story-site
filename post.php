@@ -12,28 +12,29 @@
         <tbody>
             <tr>
                 <td>
-                    <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/main.php"> -->
-                    <a href="http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/main.php">
+                    <a href="main.php">
                         <img src="static/logo.png" alt="" class='logo'>
                     </a> 
                 </td>
                 <td>
                     <span>
-                        <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/main.php">Main Page</a> -->
-                        <a href="http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/main.php">Main Page</a>
+                        <a href="main.php">Main Page</a>
                         |
-                        <!-- <?php
+                        <?php
                             session_start();
-                            if($_SESSION['token']){
-                                echo $_SESSION['token'];
-                            }
-                        ?> -->
-                        <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/login.php">Login</a> -->
-                        <a href="http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/login.php">Login</a>
-                        |
-                        <!-- <a href="http://18.191.24.174/~RohanSong/module3/group/register.php">Register</a>  -->
-                        <a href="http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/register.php">Register</a> 
-                    </span>
+                            if(isset($_SESSION['username'])) {
+                                // User is logged in
+                                echo '<a href="">'.$_SESSION['username'].'</a>
+                                |
+                                <a href="logout.php">Logout</a>';
+                            } else {
+                                // User is not logged in
+                                echo '<a href="login.php">Login</a>
+                                |
+                                <a href="register.php">Register</a>';
+                            }                            
+                        ?>
+                        </span>
                 </td>
             </tr>
         </tbody>
@@ -57,6 +58,7 @@
 
         <?php
             require 'database.php';
+            $user_ID = $_SESSION['userid'];
             if(isset($_POST['submit'])) {
                 if(isset($_POST['title']) && isset($_POST['content']) && isset($_POST['url'])) {
                     $title = $_POST['title'];
@@ -64,9 +66,6 @@
                     $content = $_POST['content'];
                     date_default_timezone_set('America/Chicago');
                     $time = date("Y-m-d H:i:s");
-
-                    # subject to change
-                    $user_ID = 1;
 
                     $stmt = $mysqli->prepare("insert into stories (user_ID, title, content, link, time) values (?, ?, ?, ?, ?)");
                     if(!$stmt){

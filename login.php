@@ -69,6 +69,8 @@
                     exit;
                 }
                 else{
+                    $_SESSION['username'] = $username;
+                    $_SESSION['userid'] = $db_id;
                     header("Location: main.php");
                     exit;
                 }
