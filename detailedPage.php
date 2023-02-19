@@ -45,18 +45,31 @@
             <?php
                 require "database.php";
                 $id = $_GET['id'];
-                $sql = "SELECT u.username, s.title, s.time, s.content, s.link
-                FROM stories AS s
-                JOIN users AS u ON s.user_ID = u.id
-                WHERE s.id = ".$id.";";
-                if ($stmt = $mysqli->prepare($sql)) {
-                    $stmt->execute();
-                    $stmt->bind_result($username, $title, $time, $content, $link);
-                    $stmt->fetch();
-                    $stmt->close();
-                } else {
+                // $sql = "SELECT u.username, s.title, s.time, s.content, s.link, s.clicks
+                // FROM stories AS s
+                // JOIN users AS u ON s.user_ID = u.id
+                // WHERE s.id = ".$id.";";
+                $stmt = $mysqli->prepare(
+                        "SELECT u.username, s.title, s.time, s.content, s.link, s.clicks
+                        FROM stories AS s
+                        JOIN users AS u ON s.user_ID = u.id
+                        WHERE s.id = ?");
+
+                if (!$stmt) {
                     echo "Error: " . $mysqli->error;
                 }
+
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $stmt->bind_result($username, $title, $time, $content, $link, $click);
+                $stmt->fetch();
+                $stmt->close();
+
+                $click += 1;
+                $stmt = $mysqli->prepare('update stories set clicks=? where id=?');
+                $stmt->bind_param('ii', $click, $id);
+                $stmt->execute();
+                $stmt->close();
             ?>
             <h1><?php echo htmlspecialchars($title); ?></h1>
             <div class="post-info">
@@ -75,7 +88,6 @@
 
             <?php
                 require 'database.php';
-                session_start();
                 $id = $_GET['id'];
                 $sql = "select c.id, u.id,u.username,c.content,c.time
                 from comments as c

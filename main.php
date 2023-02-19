@@ -44,14 +44,16 @@
             <?php
                 require 'database.php';
 
-                $sql = "SELECT s.id, u.username, s.title, s.time, COUNT(c.id) AS comment_count
+                $sql = "SELECT s.id, u.username, s.title, s.time, s.clicks, COUNT(c.id) AS comment_count 
                         FROM stories AS s
                         JOIN users AS u ON s.user_ID = u.id
                         LEFT JOIN comments AS c ON s.id = c.story_ID
-                        GROUP BY s.id;";
+                        GROUP BY s.id
+                        ORDER BY s.clicks DESC;";
+                        
                 if ($stmt = $mysqli->prepare($sql)) {
                     $stmt->execute();
-                    $stmt->bind_result($id, $username, $title, $time,$counts);
+                    $stmt->bind_result($id, $username, $title, $time, $clicks, $counts);
                     $count = 0;
                     while ($stmt->fetch()) {
                         $count += 1;
@@ -66,7 +68,7 @@
                         $output = $days . " days " . $hours . " hours " . $minutes . " minutes " . $seconds . " seconds ago";
 
                         echo "<tr><td>" . $count . "</td><th><a href='detailedPage?id=".$id."'>".$title."</a></th></tr>";
-                        echo "<tr><th></th><td>by " . $username . "</td><td>" . $output . "</td><td><a href=''>".$counts." comments</a></td></tr>";
+                        echo "<tr><th></th><td>by " . $username . "</td><td>" . $output . "</td><td><a href=''>".$counts." comments</a></td><td>" .$clicks." clicks</a></td></tr>";
                     }
                     $stmt->close();
                 } else {

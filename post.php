@@ -64,19 +64,21 @@
                     $title = $_POST['title'];
                     $url = $_POST['url'];
                     $content = $_POST['content'];
-                    date_default_timezone_set('America/Chicago');
-                    $time = date("Y-m-d H:i:s");
+                    //date_default_timezone_set('America/Chicago');
+                    //$time = date("Y-m-d H:i:s");
 
-                    $stmt = $mysqli->prepare("insert into stories (user_ID, title, content, link, time) values (?, ?, ?, ?, ?)");
+                    $stmt = $mysqli->prepare("insert into stories (user_ID, title, content, link) values (?, ?, ?, ?)");
                     if(!$stmt){
                         printf("Query Prep Failed: %s\n", $mysqli->error);
                         exit;
                     }
-                    $stmt->bind_param('issss', $user_ID, $title, $content, $url, $time);
-                    $stmt->execute();
+                    $stmt->bind_param('isss', $user_ID, $title, $content, $url);
+                    if(!$stmt->execute()) {
+                        echo "error";
+                    }
                     $stmt->close();
 
-                    header("Location: main.php");
+                    //header("Location: main.php");
                 }
             }
         ?>

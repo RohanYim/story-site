@@ -3,5 +3,5 @@
 	session_unset();
 	session_destroy();
 	//redirect to the homepage
-	header('Location: main.php');
+	header('Location: login.php');
 ?>
