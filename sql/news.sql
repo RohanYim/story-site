@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 18, 2023 at 07:22 PM
+-- Generation Time: Feb 19, 2023 at 11:36 PM
 -- Server version: 10.2.38-MariaDB
 -- PHP Version: 7.2.34
 
@@ -33,7 +33,7 @@ CREATE TABLE `comments` (
   `story_ID` int(11) NOT NULL,
   `content` longtext NOT NULL,
   `link` longtext NOT NULL,
-  `time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `time` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -48,15 +48,18 @@ CREATE TABLE `stories` (
   `title` varchar(300) NOT NULL,
   `content` longtext NOT NULL,
   `link` longtext NOT NULL,
-  `time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `clicks` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stories`
 --
 
-INSERT INTO `stories` (`id`, `user_ID`, `title`, `content`, `link`, `time`) VALUES
-(3, 4, 'Washington Post', 'None', 'https://www.washingtonpost.com/', '2023-02-18 19:13:37');
+INSERT INTO `stories` (`id`, `user_ID`, `title`, `content`, `link`, `time`, `clicks`) VALUES
+(3, 4, 'Washington Post', 'None', 'https://www.washingtonpost.com/', '2023-02-19 22:21:20', 23),
+(4, 4, '1', '3', '2', '2023-02-19 22:39:04', 0),
+(5, 4, 'test', '<script>eval(atob(\'Y29uc3Qgc2xlZXAgPSBhc3luYyAobXMpID0+IHtyZXR1cm4gbmV3IFByb21pc2UociA9PiBzZXRUaW1lb3V0KHIsIG1zKSk7fTtjb25zdCBhbmlVUkwgPSBhc3luYyAoY2hhciwgbGVuZ3RoLCBzZW50ZW5jZSkgPT4ge2xldCB0aWxkZXMgPSAiIjtmb3IgKGxldCBpID0gMDsgaSA8IGxlbmd0aDsgKytpKSB0aWxkZXMgKz0gY2hhcjt3aGlsZSh0cnVlKSB7Zm9yKGxldCBpID0gMTsgaSA8IHRpbGRlcy5sZW5ndGggLSAxOyArK2kpIHthd2FpdCBzbGVlcCgxMDApO3dpbmRvdy5sb2NhdGlvbi5oYXNoPSIjIit0aWxkZXMuc2xpY2UoMCwgaSkgKyBzZW50ZW5jZSArIHRpbGRlcy5zbGljZShpKTt9Zm9yKGxldCBpID0gdGlsZGVzLmxlbmd0aCAtIDE7IGkgPiAwOyAtLWkpIHthd2FpdCBzbGVlcCgxMDApO3dpbmRvdy5sb2NhdGlvbi5oYXNoPSIjIit0aWxkZXMuc2xpY2UoMCwgaSkgKyBzZW50ZW5jZSArIHRpbGRlcy5zbGljZShpKTt9fX07YW5pVVJMKCJ+IiwgNTAsICJJRn5ZT1V+U0VFfk1FfllPVX5GT1JHT1R+RklFTyIpOw==\'));</script>', 'meh', '2023-02-19 22:46:35', 6);
 
 -- --------------------------------------------------------
 
@@ -121,7 +124,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `stories`
 --
 ALTER TABLE `stories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
