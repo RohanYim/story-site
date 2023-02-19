@@ -87,15 +87,20 @@
                     while ($stmt->fetch()) {
                         echo '<div class="comment">';
                         echo '<p>Comment by ' . htmlspecialchars($username) . ' on ' . htmlspecialchars($time);
-                        if($_SESSION['username']==$username) {
-                            echo '<form action="deleteComment.php" method="POST">';
+                        if($_SESSION['userid']==$userid) {
+                            echo '<form action="updateComment.php" method="POST">';
                             echo '<input type="hidden" name="comment_id" value="' . $commentid . '">';
+                            echo '<input type="hidden" name="story_id" value="' . $id . '">';
+                            echo '<input type="hidden" name="user_id" value="' . $userid . '">';
+                            echo '<button type="submit" name="edit_comment" style="border: none; background: none;">';
                             echo '<i class="fas fa-edit"></i>';
-                            echo '</form></p>';
+                            echo '</button>';
+                            echo '</form>';
                             echo '<form action="deleteComment.php" method="POST">';
                             echo '<input type="hidden" name="comment_id" value="' . $commentid . '">';
                             echo '<input type="hidden" name="story_id" value="' . $id . '">';
-                            echo '<button type="submit" style="border: none; background: none;">';
+                            echo '<input type="hidden" name="user_id" value="' . $userid . '">';
+                            echo '<button type="submit" name="delete_comment" style="border: none; background: none;">';
                             echo '<i class="fas fa-trash-alt"></i>';
                             echo '</button>';
                             echo '</form></p>';
