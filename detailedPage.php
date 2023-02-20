@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if(!isset($_SESSION['token'])) {
+        $_SESSION['token'] = bin2hex(random_bytes(32));
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +30,7 @@
                         <a href="main.php">Main Page</a>
                         |
                         <?php
-                            session_start();
+                            // session_start();
                             if(isset($_SESSION['username'])) {
                                 // User is logged in
                                 echo '<a href="profile.php?id='.$_SESSION['userid'].'">'.$_SESSION['username'].'</a>
@@ -109,6 +117,9 @@
                         echo '<input type="hidden" name="comment_id" value="' . $commentid . '">';
                         echo '<input type="hidden" name="story_id" value="' . $id . '">';
                         echo '<input type="hidden" name="user_id" value="' . $userid . '">';
+                        echo '<input type="hidden" name="comment_token" value="' . $_SESSION['token'] . '">';
+
+
                         echo '<button type="submit" name="delete_comment" style="border: none; background: none;">';
                         echo '<i class="fas fa-trash-alt"></i>';
                         echo '</button>';

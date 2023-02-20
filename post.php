@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if(!isset($_SESSION['token'])) {
+        $_SESSION['token'] = bin2hex(random_bytes(32));
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +29,7 @@
                         <a href="main.php">Main Page</a>
                         |
                         <?php
-                            session_start();
+                            // session_start();
                             if(isset($_SESSION['username'])) {
                                 // User is logged in
                                 echo '<a href="profile.php?id='.$_SESSION['userid'].'">'.$_SESSION['username'].'</a>
@@ -52,6 +60,7 @@
                 <input type="text" name="url" id="url" required><br><br>
                 <label for="content">Content:</label>
                 <textarea name="content" id="content" rows="10" cols="50" required></textarea><br><br>
+                <input type="hidden" name="post_token" value="<?php echo $_SESSION['token'];?>">
                 <input type="submit" name="submit" value="Submit">
             </form>
         </body>
@@ -60,6 +69,11 @@
             require 'database.php';
             $user_ID = $_SESSION['userid'];
             if(isset($_POST['submit'])) {
+                $post_token = isset($_POST['post_token']) ? $_POST['post_token'] : null;
+                // test for validity of the CSRF token on the server side
+                if(!hash_equals($_SESSION['token'], $post_token)) {
+                    echo "<p>Invalid form submission.</p>";
+                }
                 if(isset($_POST['title']) && isset($_POST['content']) && isset($_POST['url'])) {
                     $title = $_POST['title'];
                     $url = $_POST['url'];
