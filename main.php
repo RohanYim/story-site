@@ -39,17 +39,33 @@
             </tr>
         </tbody>
     </table>
+    <form method="get" action="">
+        <input type="submit" name="sortbydate" value="Sort by date">
+        <input type="submit" name="sortbyclicks" value="Sort by clicks">
+    </form>
     <table>
         <tbody>
             <?php
+                $sortby = "";
+                if (isset($_GET['sortbydate'])) {
+                    $sortby = "s.time";
+                } else if (isset($_GET['sortbyclicks'])) {
+                    $sortby = "s.clicks";
+                }
+            
                 require 'database.php';
 
                 $sql = "SELECT u.id, s.id, u.username, s.title, s.time, s.clicks, COUNT(c.id) AS comment_count 
                         FROM stories AS s
                         JOIN users AS u ON s.user_ID = u.id
                         LEFT JOIN comments AS c ON s.id = c.story_ID
-                        GROUP BY s.id
-                        ORDER BY s.clicks DESC;";
+                        GROUP BY s.id";
+
+                if (!empty($sortby)) {
+                    $sql .= " ORDER BY " . $sortby . " DESC;";
+                }else{
+                    $sql .= ";";
+                }
                         
                 if ($stmt = $mysqli->prepare($sql)) {
                     $stmt->execute();
