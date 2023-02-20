@@ -24,7 +24,7 @@
                             session_start();
                             if(isset($_SESSION['username'])) {
                                 // User is logged in
-                                echo '<a href="">'.$_SESSION['username'].'</a>
+                                echo '<a href="profile.php?id='.$_SESSION['userid'].'">'.$_SESSION['username'].'</a>
                                 |
                                 <a href="logout.php">Logout</a>';
                             } else {
@@ -44,7 +44,7 @@
             <?php
                 require 'database.php';
 
-                $sql = "SELECT s.id, u.username, s.title, s.time, s.clicks, COUNT(c.id) AS comment_count 
+                $sql = "SELECT u.id, s.id, u.username, s.title, s.time, s.clicks, COUNT(c.id) AS comment_count 
                         FROM stories AS s
                         JOIN users AS u ON s.user_ID = u.id
                         LEFT JOIN comments AS c ON s.id = c.story_ID
@@ -53,7 +53,7 @@
                         
                 if ($stmt = $mysqli->prepare($sql)) {
                     $stmt->execute();
-                    $stmt->bind_result($id, $username, $title, $time, $clicks, $counts);
+                    $stmt->bind_result($userid, $id, $username, $title, $time, $clicks, $counts);
                     $count = 0;
                     while ($stmt->fetch()) {
                         $count += 1;
@@ -67,8 +67,12 @@
                         $seconds = $diff % 60;
                         $output = $days . " days " . $hours . " hours " . $minutes . " minutes " . $seconds . " seconds ago";
 
-                        echo "<tr><td>" . $count . "</td><th><a href='detailedPage?id=".$id."'>".$title."</a></th></tr>";
-                        echo "<tr><th></th><td>by " . $username . "</td><td>" . $output . "</td><td><a href=''>".$counts." comments</a></td><td>" .$clicks." clicks</a></td></tr>";
+                        echo "<tr><td>" . $count . "</td><th><a href='detailedPage?id=".$id."'>".$title."</a></th>";
+                        if($_SESSION['userid']==$userid) {
+                            echo "<td><a href='editPost.php?storyid=".$id."&userid=".$userid."'>edit</a></td><td><a href='deletePost.php?storyid=".$id."&userid=".$userid."'>delete</a></td>";
+                        }
+                        echo "</tr>";
+                        echo "<tr><th></th><td>by " . $username . "</td><td>" . $output . "</td><td><a href=''>".$counts." comments</a></td><td>" .$clicks." clicks</td></tr>";
                     }
                     $stmt->close();
                 } else {

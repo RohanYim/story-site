@@ -24,7 +24,7 @@
                             session_start();
                             if(isset($_SESSION['username'])) {
                                 // User is logged in
-                                echo '<a href="">'.$_SESSION['username'].'</a>
+                                echo '<a href="profile.php?id='.$_SESSION['userid'].'">'.$_SESSION['username'].'</a>
                                 |
                                 <a href="logout.php">Logout</a>';
                             } else {
@@ -78,7 +78,7 @@
                     }
                     $stmt->close();
 
-                    //header("Location: main.php");
+                    header("Location: main.php");
                 }
             }
         ?>
