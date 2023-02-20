@@ -45,10 +45,6 @@
             <?php
                 require "database.php";
                 $id = $_GET['id'];
-                // $sql = "SELECT u.username, s.title, s.time, s.content, s.link, s.clicks
-                // FROM stories AS s
-                // JOIN users AS u ON s.user_ID = u.id
-                // WHERE s.id = ".$id.";";
                 $stmt = $mysqli->prepare(
                         "SELECT u.username, s.title, s.time, s.content, s.link, s.clicks
                         FROM stories AS s
@@ -89,43 +85,41 @@
             <?php
                 require 'database.php';
                 $id = $_GET['id'];
-                $sql = "select c.id, u.id,u.username,c.content,c.time
+                $stmt = $mysqli->prepare("select c.id, u.id,u.username,c.content,c.time
                 from comments as c
                 join users as u on c.user_ID = u.id
-                where c.story_ID = ".$id.";";
-                if ($stmt = $mysqli->prepare($sql)) {
-                    $stmt->execute();
-                    $stmt->bind_result($commentid, $userid, $username, $content, $time);
-                    while ($stmt->fetch()) {
-                        echo '<div class="comment">';
-                        echo '<p>Comment by ' . htmlspecialchars($username) . ' on ' . htmlspecialchars($time);
-                        if($_SESSION['userid']==$userid) {
-                            echo '<form action="updateComment.php" method="POST">';
-                            echo '<input type="hidden" name="comment_id" value="' . $commentid . '">';
-                            echo '<input type="hidden" name="story_id" value="' . $id . '">';
-                            echo '<input type="hidden" name="user_id" value="' . $userid . '">';
-                            echo '<button type="submit" name="edit_comment" style="border: none; background: none;">';
-                            echo '<i class="fas fa-edit"></i>';
-                            echo '</button>';
-                            echo '</form>';
-                            echo '<form action="deleteComment.php" method="POST">';
-                            echo '<input type="hidden" name="comment_id" value="' . $commentid . '">';
-                            echo '<input type="hidden" name="story_id" value="' . $id . '">';
-                            echo '<input type="hidden" name="user_id" value="' . $userid . '">';
-                            echo '<button type="submit" name="delete_comment" style="border: none; background: none;">';
-                            echo '<i class="fas fa-trash-alt"></i>';
-                            echo '</button>';
-                            echo '</form></p>';
-                        }else{
-                            echo '</p>';
-                        }
-                        echo '<p>' . htmlspecialchars($content) . '</p>';
-                        echo '</div>';                        
+                where c.story_ID = ?");
+
+                $stmt->bind_param('i', $id);
+                $stmt->execute();
+                $stmt->bind_result($commentid, $userid, $username, $content, $time);
+                while ($stmt->fetch()) {
+                    echo '<div class="comment">';
+                    echo '<p>Comment by ' . htmlspecialchars($username) . ' on ' . htmlspecialchars($time);
+                    if($_SESSION['userid']==$userid) {
+                        echo '<form action="updateComment.php" method="POST">';
+                        echo '<input type="hidden" name="comment_id" value="' . $commentid . '">';
+                        echo '<input type="hidden" name="story_id" value="' . $id . '">';
+                        echo '<input type="hidden" name="user_id" value="' . $userid . '">';
+                        echo '<button type="submit" name="edit_comment" style="border: none; background: none;">';
+                        echo '<i class="fas fa-edit"></i>';
+                        echo '</button>';
+                        echo '</form>';
+                        echo '<form action="deleteComment.php" method="POST">';
+                        echo '<input type="hidden" name="comment_id" value="' . $commentid . '">';
+                        echo '<input type="hidden" name="story_id" value="' . $id . '">';
+                        echo '<input type="hidden" name="user_id" value="' . $userid . '">';
+                        echo '<button type="submit" name="delete_comment" style="border: none; background: none;">';
+                        echo '<i class="fas fa-trash-alt"></i>';
+                        echo '</button>';
+                        echo '</form></p>';
+                    }else{
+                        echo '</p>';
                     }
-                    $stmt->close();
-                } else {
-                    echo "Error: " . $mysqli->error;
+                    echo '<p>' . htmlspecialchars($content) . '</p>';
+                    echo '</div>';                        
                 }
+                $stmt->close();
 
                 if(isset($_SESSION['username'])) {
                     // User is logged in
