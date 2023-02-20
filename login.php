@@ -31,12 +31,15 @@
         <form action="register.php" method="POST">
             <p>Not yet registered? <input type="submit" value="Register"></p>
         </form>
+
+        <form action="view.php" method="POST">
+            <p>Wanna view as Guest? <input type="submit" value="Guest Entry"></p>
+        </form>
     </div>
 
     <?php
-    
         if(!isset($_POST['username']) || !isset($_POST['password'])){
-            echo "<p>Please fill in both fields.</p>";
+            echo "<font color=blue>Please fill in both fields.</font>";
         }
         else{
             require 'database.php';
@@ -64,8 +67,8 @@
                 $stmt->fetch();
                 $stmt->close();
                 if(!password_verify($password, $db_pw)){
-                    echo "1. username=" . $db_id . " pw=" . $password . " hashed=" . $db_pw;
-                    echo "<p>Incorrect username or password.</p>";
+                    // echo "1. username=" . htmlentities($db_id) . " pw=" . htmlentities($password) . " hashed=" . htmlentities($db_pw);
+                    echo "<p>Incorrect username or password!</p>";
                     exit;
                 }
                 else{
