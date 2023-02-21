@@ -32,7 +32,7 @@
                             // session_start();
                             if(isset($_SESSION['username'])) {
                                 // User is logged in
-                                echo '<a href="profile.php?id='.$_SESSION['userid'].'">'.$_SESSION['username'].'</a>
+                                echo '<a href="profile.php?id='.htmlentities($_SESSION['userid']).'">'.htmlentities($_SESSION['username']).'</a>
                                 |
                                 <a href="logout.php">Logout</a>';
                             } else {
@@ -48,6 +48,13 @@
         </tbody>
     </table>
     <html>
+        <?php
+            // guests can not post
+            if (!isset($_SESSION['username'])) {
+                header("Location: login.php");
+                exit;
+            }
+        ?>
         <head>
             <title>Upload Your Story</title>
         </head>
@@ -75,12 +82,29 @@
                     echo "<p>Invalid form submission.</p>";
                 }
                 if(isset($_POST['title']) && isset($_POST['content']) && isset($_POST['url'])) {
+                    // FIEO
+                    if (strlen($_POST['title']) > 255) {
+                        echo "<script>alert('Title must be no more than 255 characters.');</script>";
+                        exit;
+                    }
+                    if (strlen($_POST['url']) > 255) {
+                        echo "<script>alert('URL must be no more than 255 characters.');</script>";
+                        exit;
+                    }
+                    if (strlen($_POST['content']) > 65535) {
+                        echo "<script>alert('Content must be no more than 65535 characters.');</script>";
+                        exit;
+                    }
+                    if (!filter_var($_POST['url'], FILTER_VALIDATE_URL)) {
+                        echo "<script>alert('URL is not valid.');</script>";
+                        exit;
+                    }
+                    
                     $title = $_POST['title'];
                     $url = $_POST['url'];
                     $content = $_POST['content'];
-                    //date_default_timezone_set('America/Chicago');
-                    //$time = date("Y-m-d H:i:s");
 
+                    // sql query for inserting posts
                     $stmt = $mysqli->prepare("insert into stories (user_ID, title, content, link) values (?, ?, ?, ?)");
                     if(!$stmt){
                         printf("Query Prep Failed: %s\n", $mysqli->error);

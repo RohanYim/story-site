@@ -33,7 +33,7 @@
                             // session_start();
                             if(isset($_SESSION['username'])) {
                                 // User is logged in
-                                echo '<a href="profile.php?id='.$_SESSION['userid'].'">'.$_SESSION['username'].'</a>
+                                echo '<a href="profile.php?id='.htmlentities($_SESSION['userid']).'">'.htmlentities($_SESSION['username']).'</a>
                                 |
                                 <a href="logout.php">Logout</a>';
                             } else {
@@ -53,6 +53,7 @@
             <?php
                 require "database.php";
                 $id = $_GET['id'];
+                // sql query
                 $stmt = $mysqli->prepare(
                         "SELECT u.username, s.title, s.time, s.content, s.link, s.clicks
                         FROM stories AS s
@@ -60,7 +61,7 @@
                         WHERE s.id = ?");
 
                 if (!$stmt) {
-                    echo "Error: " . $mysqli->error;
+                    echo "Error: " . htmlentities($mysqli->error);
                 }
 
                 $stmt->bind_param("i", $id);
@@ -69,6 +70,7 @@
                 $stmt->fetch();
                 $stmt->close();
 
+                // check click times and update from database
                 $click += 1;
                 $stmt = $mysqli->prepare('update stories set clicks=? where id=?');
                 $stmt->bind_param('ii', $click, $id);
@@ -76,6 +78,7 @@
                 $stmt->close();
             ?>
             <h1><?php echo htmlspecialchars($title); ?></h1>
+            <!-- comment info -->
             <div class="post-info">
                 <p>Written by <?php echo htmlspecialchars($username); ?>&nbsp;</p>
                 <p>on <?php echo htmlspecialchars($time); ?>&nbsp;CDT</p>
@@ -93,10 +96,11 @@
             <?php
                 require 'database.php';
                 $id = $_GET['id'];
+                // sql query for show all the details
                 $stmt = $mysqli->prepare("select c.id, u.id,u.username,c.content,c.time
-                from comments as c
-                join users as u on c.user_ID = u.id
-                where c.story_ID = ?");
+                                            from comments as c
+                                            join users as u on c.user_ID = u.id
+                                            where c.story_ID = ?");
 
                 $stmt->bind_param('i', $id);
                 $stmt->execute();
@@ -104,21 +108,21 @@
                 while ($stmt->fetch()) {
                     echo '<div class="comment">';
                     echo '<p>Comment by ' . htmlspecialchars($username) . ' on ' . htmlspecialchars($time);
+                    // update and delete comment actions
                     if($_SESSION['userid']==$userid) {
                         echo '<form action="updateComment.php" method="POST">';
-                        echo '<input type="hidden" name="comment_id" value="' . $commentid . '">';
-                        echo '<input type="hidden" name="story_id" value="' . $id . '">';
-                        echo '<input type="hidden" name="user_id" value="' . $userid . '">';
+                        echo '<input type="hidden" name="comment_id" value="' . htmlentities($commentid) . '">';
+                        echo '<input type="hidden" name="story_id" value="' . htmlentities($id) . '">';
+                        echo '<input type="hidden" name="user_id" value="' . htmlentities($userid) . '">';
                         echo '<button type="submit" name="edit_comment" style="border: none; background: none;">';
                         echo '<i class="fas fa-edit"></i>';
                         echo '</button>';
                         echo '</form>';
                         echo '<form action="deleteComment.php" method="POST">';
-                        echo '<input type="hidden" name="comment_id" value="' . $commentid . '">';
-                        echo '<input type="hidden" name="story_id" value="' . $id . '">';
-                        echo '<input type="hidden" name="user_id" value="' . $userid . '">';
-                        echo '<input type="hidden" name="comment_token" value="' . $_SESSION['token'] . '">';
-
+                        echo '<input type="hidden" name="comment_id" value="' . htmlentities($commentid). '">';
+                        echo '<input type="hidden" name="story_id" value="' . htmlentities($id) . '">';
+                        echo '<input type="hidden" name="user_id" value="' . htmlentities($userid) . '">';
+                        echo '<input type="hidden" name="comment_token" value="' . htmlentities($_SESSION['token']) . '">';
 
                         echo '<button type="submit" name="delete_comment" style="border: none; background: none;">';
                         echo '<i class="fas fa-trash-alt"></i>';
@@ -136,14 +140,14 @@
                     // User is logged in
                     $userid = $_SESSION['userid'];
                     echo '<form action="addComment.php" method="POST">
-                            <label for="comment_content">'.$_SESSION['username'].', add a comment:</label><br>
+                            <label for="comment_content">'.htmlentities($_SESSION['username']).', add a comment:</label><br>
                             <textarea id="comment_content" name="comment_content"></textarea><br>
-                            <input type="hidden" name="story_id" value="'.$id.'">
-                            <input type="hidden" name="user_id" value="'.$userid.'">
+                            <input type="hidden" name="story_id" value="'.htmlentities($id).'">
+                            <input type="hidden" name="user_id" value="'.htmlentities($userid).'">
                             <input type="submit" name="submit" value="Submit">
                         </form>';
                 } else {
-                    // User is not logged in
+                    // User is not logged in, guests can not make a comment
                     echo '<a href="login.php">Please log in before making comments!</a>';
                 } 
             ?>

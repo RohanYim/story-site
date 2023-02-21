@@ -19,12 +19,11 @@
     <h1>Login System</h1><br><br>
     <div class = "login">
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-        <!-- <form action="login.php" method="POST"> -->
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" placeholder="Enter your username" required><br><br>
             <label for="password">Password:</label>
             <input type="password" name="password" id="password" placeholder="Endter your password" required><br>
-            <input type="hidden" name="login_token" value="<?php echo $_SESSION['token'];?>">
+            <input type="hidden" name="login_token" value="<?php echo htmlentities($_SESSION['token']);?>">
             <input type="submit" value="Log In">
         </form>
         <br>
@@ -33,27 +32,25 @@
         </form>
 
         <form action="main.php" method="POST">
-            <p>Wanna view as Guest? <input type="submit" value="Guest Entry"></p>
+            <p>Wanna view as a guest? <input type="submit" value="Guest Entry"></p>
         </form>
     </div>
 
     <?php
         if(!isset($_POST['username']) || !isset($_POST['password'])){
-            // echo "<font color=blue>Please fill in both fields.</font>";
         }
         else{
             require 'database.php';
 
             $username = $_POST['username'];
             $password = $_POST['password'];
-            // printf("username: %s", $username);
-            // printf("password: %s", $password);
             $login_token = isset($_POST['login_token']) ? $_POST['login_token'] : null;
             // test for validity of the CSRF token on the server side
             if(!hash_equals($_SESSION['token'], $login_token)) {
                 echo "<p>Invalid form submission.</p>";
             }
             else{
+                // sql query for check if user is vaild
                 $stmt = $mysqli->prepare("select id, username, password from users where username=?");
                 if(!$stmt){
                     printf("Query Prep Failed: %s\n", $mysqli->error);
@@ -65,7 +62,6 @@
                 $stmt->fetch();
                 $stmt->close();
                 if(!password_verify($password, $db_pw)){
-                    // echo "1. username=" . htmlentities($db_id) . " pw=" . htmlentities($password) . " hashed=" . htmlentities($db_pw);
                     echo "<p>Incorrect username or password!</p>";
                     exit;
                 }

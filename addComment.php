@@ -1,6 +1,7 @@
 <?php
     session_start();
-
+    
+    // csrf token check
     if(!isset($_SESSION['token'])) {
         $_SESSION['token'] = bin2hex(random_bytes(32));
     }
@@ -9,6 +10,11 @@
 
     if(isset($_POST['submit'])) {
         if(isset($_POST['user_id']) && isset($_POST['story_id']) && isset($_POST['comment_content'])) {
+            // FIEO
+            if (strlen($_POST['comment_content']) > 100) {
+                echo "<script>alert('Content must be no more than 100 characters.');</script>";
+                exit;
+            }
             $userid = $_POST['user_id'];
             $story_id = $_POST['story_id'];
             $content = $_POST['comment_content'];
@@ -17,7 +23,7 @@
             if(!hash_equals($_SESSION['token'], $comment_token)) {
                 echo "<p>Invalid form submission.</p>";
             }
-
+            // insert into database
             $stmt = $mysqli->prepare("insert into comments (user_ID, story_ID, content) values (?, ?, ?)");
             if(!$stmt){
                 printf("Query Prep Failed: %s\n", $mysqli->error);

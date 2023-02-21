@@ -24,7 +24,7 @@
                             session_start();
                             if(isset($_SESSION['username'])) {
                                 // User is logged in
-                                echo '<a href="profile.php?id='.$_SESSION['userid'].'">'.$_SESSION['username'].'</a>
+                                echo '<a href="profile.php?id='.htmlentities($_SESSION['userid']).'">'.htmlentities($_SESSION['username']).'</a>
                                 |
                                 <a href="logout.php">Logout</a>';
                             } else {
@@ -46,8 +46,8 @@
         <input type="text" name="title" id="title" required><br><br>
         <label for="title">URL:</label>
         <input type="text" name="url" id="url" required><br><br>
-        <input type="hidden" name="storyid" value="<?php echo $_GET['storyid']; ?>" >
-        <input type="hidden" name="userid" value="<?php echo $_GET['userid']; ?>" >
+        <input type="hidden" name="storyid" value="<?php echo htmlentities($_GET['storyid']); ?>" >
+        <input type="hidden" name="userid" value="<?php echo htmlentities($_GET['userid']); ?>" >
         <label for="content">Content:</label>
         <textarea name="content" id="content" rows="10" cols="50" required></textarea><br><br>
         <input type="submit" name="submit" value="Submit">

@@ -24,7 +24,7 @@
                             session_start();
                             if(isset($_SESSION['username'])) {
                                 // User is logged in
-                                echo '<a href="profile.php?id='.$_SESSION['userid'].'">'.$_SESSION['username'].'</a>
+                                echo '<a href="profile.php?id='.htmlentities($_SESSION['userid']).'">'.htmlentities($_SESSION['username']).'</a>
                                 |
                                 <a href="logout.php">Logout</a>';
                             } else {
@@ -46,6 +46,7 @@
     <table>
         <tbody>
             <?php
+                // sorting action
                 $sortby = "";
                 if (isset($_GET['sortbydate'])) {
                     $sortby = "s.time";
@@ -55,12 +56,14 @@
             
                 require 'database.php';
 
+                // sql query for all the story details shown on the main page
                 $sql = "SELECT u.id, s.id, u.username, s.title, s.time, s.clicks, COUNT(c.id) AS comment_count 
                         FROM stories AS s
                         JOIN users AS u ON s.user_ID = u.id
                         LEFT JOIN comments AS c ON s.id = c.story_ID
                         GROUP BY s.id";
 
+                // add sorting rules
                 if (!empty($sortby)) {
                     $sql .= " ORDER BY " . $sortby . " DESC;";
                 }else{
@@ -70,9 +73,11 @@
                 if ($stmt = $mysqli->prepare($sql)) {
                     $stmt->execute();
                     $stmt->bind_result($userid, $id, $username, $title, $time, $clicks, $counts);
+                    // for id
                     $count = 0;
                     while ($stmt->fetch()) {
                         $count += 1;
+                        // change time format
                         date_default_timezone_set('America/Chicago');
                         $currenttime = time();
                         $timestamp = strtotime($time);
@@ -82,17 +87,18 @@
                         $minutes = floor(($diff % (60 * 60)) / 60);
                         $seconds = $diff % 60;
                         $output = $days . " days " . $hours . " hours " . $minutes . " minutes " . $seconds . " seconds ago";
-
-                        echo "<tr><td>" . $count . "</td><th><a href='detailedPage?id=".$id."'>".$title."</a></th>";
+                        // link to detailed page
+                        echo "<tr><td>" . htmlentities($count) . "</td><th><a href='detailedPage?id=".htmlentities($id)."'>".htmlentities($title)."</a></th>";
                         if($_SESSION['userid']==$userid) {
-                            echo "<td><a href='editPost.php?storyid=".$id."&userid=".$userid."'>edit</a></td><td><a href='deletePost.php?storyid=".$id."&userid=".$userid."'>delete</a></td>";
+                            // edit and delete actions
+                            echo "<td><a href='editPost.php?storyid=".htmlentities($id)."&userid=".htmlentities($userid)."'>edit</a></td><td><a href='deletePost.php?storyid=".htmlentities($id)."&userid=".htmlentities($userid)."'>delete</a></td>";
                         }
                         echo "</tr>";
-                        echo "<tr><th></th><td>by " . $username . "</td><td>" . $output . "</td><td><a href=''>".$counts." comments</a></td><td>" .$clicks." clicks</td></tr>";
+                        echo "<tr><th></th><td>by " . htmlentities($username) . "</td><td>" . htmlentities($output) . "</td><td><a href=''>".htmlentities($counts)." comments</a></td><td>" .htmlentities($clicks)." clicks</td></tr>";
                     }
                     $stmt->close();
                 } else {
-                    echo "Error: " . $mysqli->error;
+                    echo "Error: " . htmlentities($mysqli->error);
                 }
             ?>
         </tbody>

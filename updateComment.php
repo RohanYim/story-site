@@ -18,17 +18,18 @@
             $id = $_POST['comment_id'];
             $story_id = $_POST['story_id'];
         }
-
+        // guest can not make comments
         if (!isset($_SESSION['username'])) {
             header("Location: login.php");
             exit;
         }else{
+            // users can only edit their own comment
             if($_SESSION['userid']==$user_id){
                 echo '<form action="submitUpdateComment.php" method="POST">
                         <textarea id="comment_content" name="comment_content"></textarea><br>
-                        <input type="hidden" name="comment_id" value="' . $id . '">
-                        <input type="hidden" name="story_id" value="' . $story_id . '">
-                        <input type="hidden" name="user_id" value="' . $user_id . '">
+                        <input type="hidden" name="comment_id" value="' . htmlentities($id) . '">
+                        <input type="hidden" name="story_id" value="' . htmlentities($story_id) . '">
+                        <input type="hidden" name="user_id" value="' . htmlentities($user_id) . '">
                         <input type="submit" name="submit" value="Submit">
                     </form>';
             }

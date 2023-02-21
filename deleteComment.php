@@ -11,7 +11,9 @@
                 exit;
             }else{
                 $user_id = $_POST['user_id'];
+                // users can only update their own comments
                 if($_SESSION['userid']==$user_id){
+                    // delete comment from database
                     $stmt = $mysqli->prepare("delete from comments where id = ?");
                     if(!$stmt){
                         printf("Query Prep Failed: %s\n", $mysqli->error);

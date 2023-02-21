@@ -11,7 +11,6 @@
     <h1>Register System</h1><br><br>
     <div class = "login">
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-        <!-- <form action="register.php" method="POST"> -->
             <input type="hidden" name="register" value="1">
             <label for="username">Username:</label>
             <input type="text" name="username" id="username" placeholder="Enter your username" required><br><br>
@@ -25,7 +24,6 @@
         <input type="submit" value="Back to Log In Page!">
     </form>
     <?php
-        // Include database connection
         session_start();
 
         require 'database.php';
@@ -34,8 +32,6 @@
         if (isset($_POST['register'])) {
             $username = $_POST['username'];
             $password = $_POST['password'];
-            // printf("username: %s", $username);
-            // printf("password: %s", $password);
 
             // Check if the username is already taken
             $stmt = $mysqli->prepare('select * from users where username = ?');
