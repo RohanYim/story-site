@@ -39,7 +39,7 @@
             </tr>
         </tbody>
     </table>
-    <form method="get" action="">
+    <form method="get">
         <input type="submit" name="sortbydate" value="Sort by date">
         <input type="submit" name="sortbyclicks" value="Sort by clicks">
     </form>

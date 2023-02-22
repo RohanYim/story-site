@@ -10,11 +10,9 @@
 
 # Link
 ### RohanSong
-http://18.191.24.174/~RohanSong/module2/login.php
-### FionaXu
-http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/login.php
+http://18.191.24.174/~RohanSong/module3/group/login.php
 
-##### We support the user name as follows: Rohan, Fiona, Test, Song.
+##### Here is our login page, you can start here.
 ![Image text](http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/static/login.png)
 
 # Requirements
@@ -47,11 +45,10 @@ http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-50590
 - [x] Site is intuitive to use and navigate (4 points)
 - [x] Site is visually appealing (1 point)
 
-##### Creative Portion (15 Points) (see below)
-
-Make sure you have a README.md file in your group repo with the following:
-Names and Student IDs of all the group members
-A link to your homepage of the site
-A brief description of what you did for your creative portion
-Any additional login details needed for the TA
+##### Creative Portion (15 Points)
+- [x] We provide the functionality to allow the users to have a deep look at the main page (for example, like time, comments, and number of clicks)
+![Image text](http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/static/main.png)
+- [x] We also support the hottest news rankings, to be specific, we let the users sort whatever by date or by clicks.
+- [x] In addition, we make users a detailed page, so that users can look at their homepage to see the detailed information.
+![Image text](http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/static/userdetail.png)
 
