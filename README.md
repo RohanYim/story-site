@@ -1,19 +1,5 @@
 # CSE330
-- Name: Fiona Xu
-- Student id: 510576
-- Github username: Fionawin
 
-- Name: Rohan Song
-- Student id: 505908
-- Github username: RohanYim
-
-
-# Link
-### RohanSong
-http://18.191.24.174/~RohanSong/module3/group/login.php
-
-##### Here is our login page, you can start here.
-![Image text](http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/static/login.png)
 
 # Requirements
 
@@ -50,5 +36,4 @@ http://18.191.24.174/~RohanSong/module3/group/login.php
 ![Image text](http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/static/main.png)
 - [x] We also support the hottest news rankings, to be specific, we let the users sort whatever by date or by clicks.
 - [x] In addition, we make users a detailed page, so that users can look at their homepage to see the detailed information.
-![Image text](http://ec2-3-82-231-44.compute-1.amazonaws.com/~Fiona/module3-group-510576-505908/static/userdetail.png)
 
